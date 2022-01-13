@@ -4,7 +4,7 @@ var chai = require('chai')
 
 
 describe('OAuth2Strategy', function() {
-    
+
   describe('without state:true option', function() {
     it('should throw', function() {
       expect(function() {
@@ -19,7 +19,7 @@ describe('OAuth2Strategy', function() {
       }).to.throw(TypeError, 'OAuth2Strategy requires `state: true` option when PKCE is enabled');
     });
   }); // without a verify callback
-    
+
   describe('with PKCE true transformation method', function() {
     var mockCrypto = {
       pseudoRandomBytes: function(len) {
@@ -32,7 +32,7 @@ describe('OAuth2Strategy', function() {
         );
       }
     }
-    
+
     var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
     var strategy = new OAuth2Strategy({
         authorizationURL: 'https://www.example.com/oauth2/authorize',
@@ -44,7 +44,7 @@ describe('OAuth2Strategy', function() {
         pkce: true
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
@@ -82,7 +82,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM')
         expect(u.query.code_challenge_method).to.equal('S256');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -92,7 +92,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com'].state.state).to.be.undefined;
       });
     });
-    
+
     describe('handling a request to be redirected for authorization with state', function() {
       var request, url;
 
@@ -116,7 +116,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM')
         expect(u.query.code_challenge_method).to.equal('S256');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -126,7 +126,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com'].state.state).to.deep.equal({ returnTo: '/somewhere' });
       });
     });
-    
+
     describe('handling a request to be redirected for authorization with state set to boolean true', function() {
       var request, url;
 
@@ -150,7 +150,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM')
         expect(u.query.code_challenge_method).to.equal('S256');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -160,7 +160,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com'].state.state).to.equal(true);
       });
     });
-    
+
     describe('handling a request to be redirected for authorization with state set to boolean false', function() {
       var request, url;
 
@@ -184,7 +184,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM')
         expect(u.query.code_challenge_method).to.equal('S256');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -194,7 +194,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com'].state.state).to.be.undefined;
       });
     });
-    
+
     describe('that redirects to service provider with other data in session', function() {
       var request, url;
 
@@ -217,7 +217,7 @@ describe('OAuth2Strategy', function() {
         var u = uri.parse(url, true);
         expect(u.query.state).to.have.length(24);
       });
-    
+
       it('should save state in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -225,7 +225,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com'].state.code_verifier).to.have.length(43);
         expect(request.session['oauth2:www.example.com'].state.code_verifier).to.equal('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk');
       });
-      
+
       it('should preserve other data in session', function() {
         expect(request.session['oauth2:www.example.com'].foo).to.equal('bar');
       });
@@ -271,7 +271,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com']).to.be.undefined;
       });
     });
-    
+
     describe('processing response to authorization request with state', function() {
       var request
         , user
@@ -312,7 +312,7 @@ describe('OAuth2Strategy', function() {
         expect(request.session['oauth2:www.example.com']).to.be.undefined;
       });
     });
-    
+
     describe('that was approved with other data in the session', function() {
       var request
         , user
@@ -327,7 +327,7 @@ describe('OAuth2Strategy', function() {
           })
           .req(function(req) {
             request = req;
-          
+
             req.query = {};
             req.query.code = 'SplxlOBeZQQYbYS6WxSbIA';
             req.query.state = 'DkbychwKu8kBaJoLE5yeR5NK';
@@ -348,13 +348,13 @@ describe('OAuth2Strategy', function() {
         expect(info).to.be.an.object;
         expect(info.message).to.equal('Hello');
       });
-    
+
       it('should preserve other data from session', function() {
         expect(request.session['oauth2:www.example.com'].state).to.be.undefined;
         expect(request.session['oauth2:www.example.com'].foo).to.equal('bar');
       });
     }); // that was approved with other data in the session
-    
+
     describe('that errors due to lack of session support in app', function() {
       var request, err;
 
@@ -376,7 +376,7 @@ describe('OAuth2Strategy', function() {
       });
     }); // that errors due to lack of session support in app
   });
-    
+
   describe('with PKCE plain transformation method', function() {
     var mockCrypto = {
       pseudoRandomBytes: function(len) {
@@ -388,7 +388,7 @@ describe('OAuth2Strategy', function() {
         );
       }
     }
-    
+
     var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
     var strategy = new OAuth2Strategy({
         authorizationURL: 'https://www.example.com/oauth2/authorize',
@@ -400,7 +400,7 @@ describe('OAuth2Strategy', function() {
         pkce: 'plain'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
@@ -438,7 +438,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk')
         expect(u.query.code_challenge_method).to.equal('plain');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -488,7 +488,7 @@ describe('OAuth2Strategy', function() {
       });
     });
   });
-  
+
   describe('with PKCE S256 transformation method', function() {
     var mockCrypto = {
       pseudoRandomBytes: function(len) {
@@ -501,7 +501,7 @@ describe('OAuth2Strategy', function() {
         );
       }
     }
-    
+
     var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
     var strategy = new OAuth2Strategy({
         authorizationURL: 'https://www.example.com/oauth2/authorize',
@@ -513,7 +513,7 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
@@ -551,7 +551,7 @@ describe('OAuth2Strategy', function() {
         expect(u.query.code_challenge).to.equal('E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM')
         expect(u.query.code_challenge_method).to.equal('S256');
       });
-    
+
       it('should save verifier in session', function() {
         var u = uri.parse(url, true);
         expect(request.session['oauth2:www.example.com'].state.handle).to.have.length(24);
@@ -628,7 +628,7 @@ describe('OAuth2Strategy', function() {
         pkce: 'unknown'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
@@ -667,7 +667,7 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
@@ -698,7 +698,7 @@ describe('OAuth2Strategy', function() {
         expect(info).to.be.undefined;
       });
     });
-    
+
     describe('that fails due to state being invalid', function() {
       var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
       var strategy = new OAuth2Strategy({
@@ -711,13 +711,13 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
       });
-      
-      
+
+
       var request
         , info, status;
 
@@ -730,7 +730,7 @@ describe('OAuth2Strategy', function() {
           })
           .req(function(req) {
             request = req;
-          
+
             req.query = {};
             req.query.code = 'SplxlOBeZQQYbYS6WxSbIA';
             req.query.state = 'DkbychwKu8kBaJoLE5yeR5NK-WRONG';
@@ -745,16 +745,16 @@ describe('OAuth2Strategy', function() {
         expect(info).to.be.an.object;
         expect(info.message).to.equal('Invalid authorization request state.');
       });
-    
+
       it('should supply status', function() {
         expect(status).to.equal(403);
       });
-    
+
       it('should remove state from session', function() {
         expect(request.session['oauth2:www.example.com']).to.be.undefined;
       });
     }); // that fails due to state being invalid
-    
+
     describe('that fails due to provider-specific state not found in session', function() {
       var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
       var strategy = new OAuth2Strategy({
@@ -767,13 +767,13 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
       });
-      
-      
+
+
       var request
         , info, status;
 
@@ -786,7 +786,7 @@ describe('OAuth2Strategy', function() {
           })
           .req(function(req) {
             request = req;
-          
+
             req.query = {};
             req.query.code = 'SplxlOBeZQQYbYS6WxSbIA';
             req.query.state = 'DkbychwKu8kBaJoLE5yeR5NK';
@@ -799,12 +799,12 @@ describe('OAuth2Strategy', function() {
         expect(info).to.be.an.object;
         expect(info.message).to.equal('Unable to verify authorization request state.');
       });
-    
+
       it('should supply status', function() {
         expect(status).to.equal(403);
       });
     }); // that fails due to state not found in session
-    
+
     describe('that fails due to provider-specific state lacking state value', function() {
       var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
       var strategy = new OAuth2Strategy({
@@ -817,13 +817,13 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
       });
-      
-      
+
+
       var request
         , info, status;
 
@@ -836,7 +836,7 @@ describe('OAuth2Strategy', function() {
           })
           .req(function(req) {
             request = req;
-          
+
             req.query = {};
             req.query.code = 'SplxlOBeZQQYbYS6WxSbIA';
             req.query.state = 'DkbychwKu8kBaJoLE5yeR5NK';
@@ -850,12 +850,12 @@ describe('OAuth2Strategy', function() {
         expect(info).to.be.an.object;
         expect(info.message).to.equal('Unable to verify authorization request state.');
       });
-    
+
       it('should supply status', function() {
         expect(status).to.equal(403);
       });
     }); // that fails due to provider-specific state lacking state value
-    
+
     describe('that errors due to lack of session support in app', function() {
       var OAuth2Strategy = require('proxyquire')('../lib/strategy', { crypto: mockCrypto });
       var strategy = new OAuth2Strategy({
@@ -868,13 +868,13 @@ describe('OAuth2Strategy', function() {
         pkce: 'S256'
       },
       function(accessToken, refreshToken, profile, done) {
-        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') { 
+        if (accessToken == '2YotnFZFEjr1zCsicMWpAA' && refreshToken == 'tGzv3JOkF0XG5Qx2TlKWIA') {
           return done(null, { id: '1234' }, { message: 'Hello' });
         }
         return done(null, false);
       });
-      
-      
+
+
       var request
         , err;
 
@@ -886,7 +886,7 @@ describe('OAuth2Strategy', function() {
           })
           .req(function(req) {
             request = req;
-          
+
             req.query = {};
             req.query.code = 'SplxlOBeZQQYbYS6WxSbIA';
             req.query.state = 'DkbychwKu8kBaJoLE5yeR5NK';
@@ -899,6 +899,6 @@ describe('OAuth2Strategy', function() {
         expect(err.message).to.equal('OAuth 2.0 authentication requires session support when using state. Did you forget to use express-session middleware?');
       });
     }); // that errors due to lack of session support in app
-    
+
   });
 });
